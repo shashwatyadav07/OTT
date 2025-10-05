@@ -1,0 +1,17 @@
+.movie-list {
+  display: flex;
+  flex-direction:column;
+  width: 100%;
+}
+.rail-title{
+  /* align-items: left; */
+  font-size: 24px;
+  font-weight: bold;
+}
+.rail {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
