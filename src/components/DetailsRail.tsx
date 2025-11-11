@@ -3,19 +3,21 @@ import { Card } from "./Card";
 import "./Rail.css";
 import type { Movie } from "../types/Movies";
 
-interface FetchRailProps {
+interface DetailsRailProps {
   title: string;
-  fetcher: () => Promise<any>; // should return { results: Movie[] } or Movie[]
+  ids: number[]; // list of movie ids to fetch details for
+  fetchDetail: (id: number) => Promise<any>;
   cardWidth?: number;
   gap?: number;
 }
 
-export const Rail = ({
+export const DetailsRail = ({
   title,
-  fetcher,
+  ids,
+  fetchDetail,
   cardWidth = 300,
   gap = 16,
-}: FetchRailProps) => {
+}: DetailsRailProps) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,24 +28,22 @@ export const Rail = ({
   useEffect(() => {
     let mounted = true;
     setLoading(true);
-    fetcher()
-      .then((data) => {
+    Promise.all(ids.map((id) => fetchDetail(id)))
+      .then((results) => {
         if (!mounted) return;
-        const results: Movie[] = Array.isArray(data)
-          ? data
-          : data?.results ?? [];
+        // results are detail objects
         setMovies(results);
         setLoading(false);
       })
       .catch((err) => {
         if (!mounted) return;
-        setError(err.message ?? "Failed to fetch");
+        setError(err.message ?? "Failed to fetch details");
         setLoading(false);
       });
     return () => {
       mounted = false;
     };
-  }, [fetcher]);
+  }, [ids, fetchDetail]);
 
   useEffect(() => {
     const el = railRef.current;
@@ -64,7 +64,7 @@ export const Rail = ({
   const scroll = (direction: number) => {
     const el = railRef.current;
     if (!el) return;
-    const distance = (cardWidth + gap) * 2; // scroll by 2 cards
+    const distance = (cardWidth + gap) * 2;
     el.scrollBy({ left: direction * distance, behavior: "smooth" });
   };
 
@@ -100,7 +100,7 @@ export const Rail = ({
         )}
 
         <div className="rail" ref={railRef}>
-          {movies.map((movie) => (
+          {movies.map((movie: Movie) => (
             <Card
               key={movie.id}
               title={movie.title}
