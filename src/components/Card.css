@@ -10,6 +10,7 @@
   flex-direction: column;
   padding: 4px;
   overflow: hidden;
+  flex-shrink: 0; /* Prevent shrinking in horizontal rail */
 }
 
 .img {

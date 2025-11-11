@@ -1,17 +1,61 @@
 .movie-list {
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   width: 100%;
 }
-.rail-title{
-  /* align-items: left; */
+.rail-title {
   font-size: 24px;
   font-weight: bold;
+  margin-bottom: 8px;
+  text-align: left;
 }
+
+/* wrapper to position nav buttons */
+.rail-wrapper {
+  position: relative;
+}
+
+/* horizontal rail */
 .rail {
   display: flex;
   flex-direction: row;
   gap: 16px;
   overflow-x: auto;
-  padding-bottom: 8px;
+  scroll-behavior: smooth;
+}
+.rail::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* nav buttons */
+.rail-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 36px;
+  height: 86px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: rgb(197, 186, 186);
+  font-size: 34px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.rail-button.left {
+  left: 6px;
+}
+
+.rail-button.right {
+  right: 6px;
+}
+
+.rail-button:disabled {
+  opacity: 0.65;
+  pointer-events: none;
 }
